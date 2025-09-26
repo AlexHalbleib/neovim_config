@@ -1,3 +1,42 @@
+-- Bootstrap lazy.nvim
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not (vim.uv or vim.loop).fs_stat(lazypath) then
+  local lazyrepo = "https://github.com/folke/lazy.nvim.git"
+  local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
+  if vim.v.shell_error ~= 0 then
+    vim.api.nvim_echo({
+      { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
+      { out, "WarningMsg" },
+      { "\nPress any key to exit..." },
+    }, true, {})
+    vim.fn.getchar()
+    os.exit(1)
+  end
+end
+vim.opt.rtp:prepend(lazypath)
+
+-- Make sure to setup `mapleader` and `maplocalleader` before
+-- loading lazy.nvim so that mappings are correct.
+-- This is also a good place to setup other settings (vim.opt)
+vim.g.mapleader = " "
+vim.g.maplocalleader = "\\"
+
+-- Setup lazy.nvim
+require("lazy").setup({
+  spec = {
+    -- add your plugins here
+		{
+			"mason-org/mason.nvim",
+			opts = {}
+		}
+  },
+  -- Configure any other settings here. See the documentation for more details.
+  -- colorscheme that will be used when installing plugins.
+  install = { colorscheme = { "habamax" } },
+  -- automatically check for plugin updates
+  checker = { enabled = true },
+})
+
 -- install mini pack
 -- Put this at the top of 'init.lua'
 local path_package = vim.fn.stdpath('data') .. '/site'
@@ -11,8 +50,8 @@ if not vim.loop.fs_stat(mini_path) then
 		'https://github.com/nvim-mini/mini.pick', mini_path
 	}
 	vim.fn.system(clone_cmd)
-	vim.cmd('packadd mini.nvim | helptags ALL')
-	vim.cmd('echo "Installed `mini.nvim`" | redraw')
+	vim.cmd('packadd mini.pack | helptags ALL')
+	vim.cmd('echo "Installed `mini.pack`" | redraw')
 end
 
 -- basic option settings
@@ -24,8 +63,6 @@ vim.opt.wrap = false
 vim.opt.smartindent = true
 vim.opt.winborder = 'rounded'
 vim.opt.signcolumn = "yes"
-
-vim.g.mapleader = " "
 
 -- keymappings 
 vim.keymap.set('n', '<leader>w', ':write<cr>')
