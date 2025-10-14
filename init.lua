@@ -37,10 +37,14 @@ require("lazy").setup({
   install = { colorscheme = { "slate" } },
   -- automatically check for plugin updates
   checker = { enabled = true },
+  { import = "plugins"},  -- loads every *.lua file inside lua/plugins/
 })
 
 -- theme and transparency
-vim.cmd.colorscheme("slate")
+-- vim.cmd.colorscheme("slate")
+vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
+vim.api.nvim_set_hl(0, "NormalNC", { bg = "none" })
+vim.api.nvim_set_hl(0, "EndOfBuffer", { bg = "none" })
 
 -- basic option settings
 vim.opt.number = true
@@ -88,6 +92,7 @@ vim.keymap.set('n', '<leader>rc', ':e ~/.config/nvim/init.lua<cr>', { desc = "Op
 vim.keymap.set('n', '<leader>d', '"_d', { desc = "Delete without yanking" })
 vim.keymap.set('n', '<leader>y', '"+y', { desc = "Yank to system clipboard" })
 vim.keymap.set('n', '<leader>p', '"+p', { desc = "Put from system clipboard" })
+
 
 -- buffer navigation
 vim.keymap.set('n', '<leader>bn', ':bnext<CR>', { desc = "next buffer" })
@@ -232,6 +237,17 @@ vim.api.nvim_create_autocmd('LspAttach', {
 vim.lsp.enable({
 	'lua_ls',
 	'ruff',
-	'basedpyright'
+	'basedpyright',
+  	'rust_analyzer'
 })
 
+ 
+vim.lsp.config('rust_analyzer', {
+  settings = {
+     ['rust-analyzer'] = {
+       diagnostics = {
+         enable = true;
+       }
+     }
+   }
+ })
